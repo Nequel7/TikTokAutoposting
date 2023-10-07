@@ -65,8 +65,7 @@ class BotPost:
         app = pywinauto.application.Application()
         app.connect(title='Открытие')
         app.Dialog.Edit0.type_keys(
-            r"C:\Users\zubri\PycharmProjects\autoposting\video\{video}".format(
-                video=videos_list[i % filters]),
+            f"C:\\Users\\zubri\\PycharmProjects\\autoposting\\video\\{videos_list[i % filters]}",
             with_spaces=True)
         app.Dialog.Edit0.type_keys('{ENTER}')
         time.sleep(5)
@@ -107,7 +106,7 @@ class BotPost:
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "div[class='tiktok-modal__modal-button is-highlight']")))
         print(f"✅ Video uploaded successfully in account ({account.split('_')[0]})")
-        browser.quit()
+        # browser.quit()
 
     # tiktok-modal__modal-button is-highlight
     # if browser.find_element(By.CSS_SELECTOR, "span[class='jsx-366267946 modalTitle']")
@@ -128,39 +127,41 @@ class BotAuth:
         self.browser = uc.Chrome(use_subprocess=False, driver_executable_path=os.getenv('DRIVER_PATH'),
                                  options=self.options)
 
-    def auth(self, username, password):
+    def auth(self, username):
         with self.browser as browser:
             print('Auth starting...')
             browser.get(url)
             browser.maximize_window()
             time.sleep(3)
-            browser.find_element(By.ID, 'header-login-button').click()
-            time.sleep(3)
-            # browser.find_element(By.ID, 'loginContainer').find_element(By.LINK_TEXT,
-            #                                                            'Введите телефон / почту / имя пользователя').click()
-            browser.find_element(By.CSS_SELECTOR, "button[data-list-item-value='email/username']").click()
-            time.sleep(3)
-            # browser.find_element(By.LINK_TEXT, 'Войти через эл. почту или имя пользователя').click()
-            time.sleep(3)
-            # enter username
-            # tiktok-11to27l-InputContainer etcs7ny1
-            login_input = browser.find_element(By.CSS_SELECTOR,
-                                               "input[class='tiktok-af1p2k-InputContainer etcs7ny1']")
-            login_input.clear()
-            login_input.send_keys(username)
-            time.sleep(2)
-            # enter password
-            # tiktok-wv3bkt-InputContainer etcs7ny1
-            password_input = browser.find_element(By.CSS_SELECTOR,
-                                                  "input[class='tiktok-15cv7mx-InputContainer etcs7ny1']")
-            password_input.clear()
-            password_input.send_keys(password)
-            time.sleep(3)
-            # press login btn
-            # e1w6iovg0 tiktok-11sviba-Button-StyledButton ehk74z00
-            browser.find_element(By.CSS_SELECTOR,
-                                 "button[class='ewv405f0 tiktok-186g1ag-Button-StyledButton ehk74z00']").click()
-            time.sleep(60)
+            # browser.find_element(By.ID, 'header-login-button').click()
+            # time.sleep(3)
+            # # browser.find_element(By.ID, 'loginContainer').find_element(By.LINK_TEXT,
+            # #                                                            'Введите телефон / почту / имя пользователя').click()
+            # browser.find_element(By.CSS_SELECTOR, "button[data-list-item-value='email/username']").click()
+            # time.sleep(3)
+            # # browser.find_element(By.LINK_TEXT, 'Войти через эл. почту или имя пользователя').click()
+            # time.sleep(3)
+            # # enter username
+            # # tiktok-11to27l-InputContainer etcs7ny1
+            # login_input = browser.find_element(By.CSS_SELECTOR,
+            #                                    "input[class='tiktok-af1p2k-InputContainer etcs7ny1']")
+            # login_input.clear()
+            # login_input.send_keys(username)
+            # time.sleep(2)
+            # # enter password
+            # # tiktok-wv3bkt-InputContainer etcs7ny1
+            # password_input = browser.find_element(By.CSS_SELECTOR,
+            #                                       "input[class='tiktok-15cv7mx-InputContainer etcs7ny1']")
+            # password_input.clear()
+            # password_input.send_keys(password)
+            # time.sleep(3)
+            # # press login btn
+            # # e1w6iovg0 tiktok-11sviba-Button-StyledButton ehk74z00
+            # browser.find_element(By.CSS_SELECTOR,
+            #                      "button[class='ewv405f0 tiktok-186g1ag-Button-StyledButton ehk74z00']").click()
+            # time.sleep(10)
+            dm_btn = WebDriverWait(browser, 120).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "div[data-e2e='top-dm-icon']")))
 
             # insert cookie
             pickle.dump(
@@ -168,7 +169,6 @@ class BotAuth:
                 open(f'C:/Users/zubri/PycharmProjects/autoposting/cookies/{username}_cookies', 'wb')
             )
             print('Cookies saved successfully !')
-            browser.quit()
 
 # def main():
 #     # bot.auth(username='chiavod01', password='!chia5000usdt')

@@ -14,24 +14,25 @@ def post(category: str):
     error_accounts = []
     if category == 'all':
         for i, account in enumerate(os.listdir('cookies')):
+            bot = BotPost()
             try:
-                bot = BotPost()
                 bot.load_video(account=account, i=i)
+                bot.close_browser()
                 # selenium.common.exceptions.NoSuchElementException
             except Exception as ex:
                 print('ERROR', ex, f'In account: {account.split("_")[0]}')
                 error_accounts.append(account)
+                bot.close_browser()
                 continue
         if len(error_accounts) > 0:
             for i, err_acc in enumerate(error_accounts):
+                bot = BotPost()
                 try:
-                    bot = BotPost()
                     bot.load_video(account=err_acc, i=i)
                 except Exception as ex:
                     print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
+                    bot.close_browser()
                     continue
-            bot = BotPost()
-            bot.close_browser()
     else:
         if db.category_exists(category):
             error_accounts = []
@@ -39,6 +40,7 @@ def post(category: str):
                 try:
                     bot = BotPost()
                     bot.load_video(account=account, i=i)
+                    bot.close_browser()
                     # selenium.common.exceptions.NoSuchElementException
                 except Exception as ex:
                     print('ERROR', ex, f'In account: {account.split("_")[0]}')
@@ -46,22 +48,21 @@ def post(category: str):
                     continue
             if len(error_accounts) > 0:
                 for i, err_acc in enumerate(error_accounts):
+                    bot = BotPost()
                     try:
-                        bot = BotPost()
                         bot.load_video(account=err_acc, i=i)
                     except Exception as ex:
                         print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
+                        bot.close_browser()
                         continue
-                bot = BotPost()
-                bot.close_browser()
         else:
             print('❌ Категории с таким название не существует')
 
 
 @app.command()
-def auth(username: str, password: str):
+def auth(username: str):
     bot = BotAuth()
-    bot.auth(username=username, password=password)
+    bot.auth(username=username)
 
 
 # добавить категорию
@@ -121,3 +122,6 @@ def del_account(account: str):
 if __name__ == "__main__":
     app()
 # копия видео
+# закрывать страницу через крестик
+# ожидания везде
+# хештеги и собака в название
