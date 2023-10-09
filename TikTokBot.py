@@ -1,3 +1,4 @@
+import dotenv
 from selenium import webdriver
 import undetected_chromedriver as uc
 import time
@@ -11,12 +12,10 @@ import os
 import pickle
 import pywinauto
 from supports import random_proxy
+from video_title import MARK, HASHTAGS
 
 url = 'https://www.tiktok.com/'
-
-
-# username = 'chiavod02'
-# password = '!chia5000usdt'
+dotenv.load_dotenv()
 
 
 class BotPost:
@@ -48,14 +47,16 @@ class BotPost:
         browser.maximize_window()
         time.sleep(4)
         for cookie in pickle.load(
-                open(f'C:/Users/zubri/PycharmProjects/autoposting/cookies/{account}', 'rb')):
+                open(f'{os.getenv("COOKIES_PATH")}{account}', 'rb')):
             browser.add_cookie(cookie)
         time.sleep(2)
         browser.refresh()
-        time.sleep(10)
+        time.sleep(2)
         browser.get('https://www.tiktok.com/creator-center/upload?from=upload')
         # browser.find_element(By.CSS_SELECTOR, "span[class='tiktok-y3rt08-SpanUploadText e18d3d946']").click()
-        time.sleep(15)
+        time.sleep(10)
+        # iframe = WebDriverWait(browser, 20).until(
+        #     EC.element_to_be_clickable((By.CSS_SELECTOR, "iframe[data-tt='Upload_index_iframe']")))
         iframe = browser.find_element(By.CSS_SELECTOR, "iframe[data-tt='Upload_index_iframe']")
         browser.switch_to.frame(iframe)
         time.sleep(3)
@@ -65,16 +66,16 @@ class BotPost:
         app = pywinauto.application.Application()
         app.connect(title='Открытие')
         app.Dialog.Edit0.type_keys(
-            f"C:\\Users\\zubri\\PycharmProjects\\autoposting\\video\\{videos_list[i % filters]}",
+            f"{os.getenv('VIDEO_PATH')}{videos_list[i % filters]}",
             with_spaces=True)
         app.Dialog.Edit0.type_keys('{ENTER}')
-        time.sleep(5)
-        element = WebDriverWait(browser, 20).until(
+        element = WebDriverWait(browser, 300).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "button[class='css-ug6w5y']"))).click()
+
         time.sleep(2)
         # set sound
-        sound_input = browser.find_element(By.CSS_SELECTOR,
-                                           "input[class='jsx-3621125540 search-bar-input']")
+        sound_input = WebDriverWait(browser, 5).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "input[class='jsx-3621125540 search-bar-input']")))
         sound_input.clear()
         sound_input.send_keys('1 second')
         sound_input.send_keys(Keys.ENTER)
@@ -98,21 +99,35 @@ class BotPost:
         title = browser.find_element(By.CSS_SELECTOR, "span[class='jsx-366267946 modalTitle']")
         action.move_to_element(title).move_by_offset(xoffset=720,
                                                      yoffset=0).click().perform()
+        time.sleep(2)
+        # set mark
+        title_video = browser.find_element(By.CSS_SELECTOR, "span[class='css-wpwnoe']")
+        action = ActionChains(browser)
+        action.move_to_element(title_video).move_by_offset(xoffset=590,
+                                                           yoffset=36).click().perform()
+        mark_input = WebDriverWait(browser, 10).until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "input[class='jsx-2893442251 search-friends']")))
+        mark_input.send_keys(MARK)
+        time.sleep(2)
+        mark_input.send_keys(Keys.ENTER)
+        # set hashtag
+        for hashtag in HASHTAGS:
+            action = ActionChains(browser)
+            action.move_to_element(title_video).move_by_offset(xoffset=500, yoffset=36).click().send_keys(
+                f'#{hashtag}').perform()
+            time.sleep(2)
+            action.send_keys(Keys.ENTER).perform()
+        # browser.find_element(By.CSS_SELECTOR, "img[class='jsx-2893442251 close-icon']").click()
+
+        time.sleep(1)
         # post video
         browser.execute_script("window.scrollBy(0,700)")
         browser.find_element(By.CSS_SELECTOR, "button[class='css-y1m958']").click()
         time.sleep(5)
-        WebDriverWait(browser, 60).until(
+        WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "div[class='tiktok-modal__modal-button is-highlight']")))
         print(f"✅ Video uploaded successfully in account ({account.split('_')[0]})")
-        # browser.quit()
-
-    # tiktok-modal__modal-button is-highlight
-    # if browser.find_element(By.CSS_SELECTOR, "span[class='jsx-366267946 modalTitle']")
-    #
-    # print('y')
-    # time.sleep(300)
 
 
 class BotAuth:
