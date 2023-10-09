@@ -183,33 +183,3 @@ class BotAuth:
                 open(f'C:/Users/zubri/PycharmProjects/autoposting/cookies/{username}_cookies', 'wb')
             )
             print('Cookies saved successfully !')
-
-# def main():
-#     # bot.auth(username='chiavod01', password='!chia5000usdt')
-#     error_accounts = []
-#     for account in accounts:
-#         try:
-#             bot = BotPost()
-#             bot.load_video(account=account)
-#             # selenium.common.exceptions.NoSuchElementException
-#         except Exception as ex:
-#             print('ERROR', ex, f'In account: {account}')
-#             error_accounts.append(account)
-#             continue
-#     for err_acc in error_accounts:
-#         try:
-#             bot = BotPost()
-#             bot.load_video(account=err_acc)
-#         except Exception as ex:
-#             print('CRITICAL ERROR', ex, f'In account: {err_acc}')
-#             continue
-#     bot = BotPost()
-#     bot.close_browser()
-
-
-# for account in accounts:
-#     bot = BotPost()
-#     bot.load_video(account=account)
-
-# if __name__ == '__main__':
-#     main()
