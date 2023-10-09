@@ -117,7 +117,6 @@ class BotPost:
                 f'#{hashtag}').perform()
             time.sleep(2)
             action.send_keys(Keys.ENTER).perform()
-        # browser.find_element(By.CSS_SELECTOR, "img[class='jsx-2893442251 close-icon']").click()
 
         time.sleep(1)
         # post video
