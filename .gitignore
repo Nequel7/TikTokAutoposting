@@ -5,4 +5,4 @@ __pycache__/
 chromedriver.exe
 video/
 cookies/
-db.sqlite3
+db_file/db.sqlite3

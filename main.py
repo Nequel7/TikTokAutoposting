@@ -5,7 +5,7 @@ from db import DataBase
 from supports import account_exists
 
 app = typer.Typer()
-db = DataBase('db.sqlite3')
+db = DataBase('db_file/db.sqlite3')
 
 
 # пост
