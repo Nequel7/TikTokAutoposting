@@ -6,3 +6,5 @@ chromedriver.exe
 video/
 cookies/
 db_file/
+proxy_data.py
+video_title.py
