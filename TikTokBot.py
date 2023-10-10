@@ -184,6 +184,6 @@ class BotAuth:
             # insert cookie
             pickle.dump(
                 browser.get_cookies(),
-                open(f'C:/Users/zubri/PycharmProjects/autoposting/cookies/{username}_cookies', 'wb')
+                open(f'{os.getenv("COOKIES_PATH")}{username}_cookies', 'wb')
             )
             print('Cookies saved successfully !')
