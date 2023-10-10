@@ -120,7 +120,7 @@ class BotPost:
 
         time.sleep(1)
         # post video
-        browser.execute_script("window.scrollBy(0,900)")
+        browser.execute_script("window.scrollBy(0,1200)")
         browser.find_element(By.CSS_SELECTOR, "button[class='css-y1m958']").click()
         time.sleep(5)
         WebDriverWait(browser, 100).until(
