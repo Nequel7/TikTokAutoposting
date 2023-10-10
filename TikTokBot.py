@@ -119,8 +119,12 @@ class BotPost:
             action.send_keys(Keys.ENTER).perform()
 
         time.sleep(1)
+        browser.switch_to.window(browser.window_handles[0])
         # post video
         browser.execute_script("window.scrollBy(0,1200)")
+        time.sleep(1)
+        browser.switch_to.frame(iframe)
+
         browser.find_element(By.CSS_SELECTOR, "button[class='css-y1m958']").click()
         time.sleep(5)
         WebDriverWait(browser, 100).until(
