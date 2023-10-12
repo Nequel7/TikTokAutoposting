@@ -29,6 +29,7 @@ def post(category: str):
                 bot = BotPost()
                 try:
                     bot.load_video(account=err_acc, i=i)
+                    bot.close_browser()
                 except Exception as ex:
                     print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
                     bot.close_browser()
@@ -37,20 +38,22 @@ def post(category: str):
         if db.category_exists(category):
             error_accounts = []
             for i, account in enumerate(db.get_accounts_in_category(category)):
+                bot = BotPost()
                 try:
-                    bot = BotPost()
                     bot.load_video(account=account, i=i)
                     bot.close_browser()
                     # selenium.common.exceptions.NoSuchElementException
                 except Exception as ex:
                     print('ERROR', ex, f'In account: {account.split("_")[0]}')
                     error_accounts.append(account)
+                    bot.close_browser()
                     continue
             if len(error_accounts) > 0:
                 for i, err_acc in enumerate(error_accounts):
                     bot = BotPost()
                     try:
                         bot.load_video(account=err_acc, i=i)
+                        bot.close_browser()
                     except Exception as ex:
                         print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
                         bot.close_browser()
