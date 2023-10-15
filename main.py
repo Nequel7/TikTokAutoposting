@@ -3,12 +3,14 @@ import typer
 from TikTokBot import BotPost, BotAuth
 from db import DataBase
 from supports import account_exists
+from TikTokBot_mp import load_mp
+from multiprocessing import Pool
 
 app = typer.Typer()
 db = DataBase('db_file/db.sqlite3')
 
 
-# пост
+# пост обычный
 @app.command()
 def post(category: str):
     error_accounts = []
@@ -17,23 +19,23 @@ def post(category: str):
             bot = BotPost()
             try:
                 bot.load_video(account=account, i=i)
-                bot.close_browser()
                 # selenium.common.exceptions.NoSuchElementException
             except Exception as ex:
                 print('ERROR', ex, f'In account: {account.split("_")[0]}')
                 error_accounts.append(account)
-                bot.close_browser()
                 continue
+            finally:
+                bot.close_browser()
         if len(error_accounts) > 0:
             for i, err_acc in enumerate(error_accounts):
                 bot = BotPost()
                 try:
                     bot.load_video(account=err_acc, i=i)
-                    bot.close_browser()
                 except Exception as ex:
                     print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
-                    bot.close_browser()
                     continue
+                finally:
+                    bot.close_browser()
     else:
         if db.category_exists(category):
             error_accounts = []
@@ -41,23 +43,39 @@ def post(category: str):
                 bot = BotPost()
                 try:
                     bot.load_video(account=account, i=i)
-                    bot.close_browser()
                     # selenium.common.exceptions.NoSuchElementException
                 except Exception as ex:
                     print('ERROR', ex, f'In account: {account.split("_")[0]}')
                     error_accounts.append(account)
-                    bot.close_browser()
                     continue
+                finally:
+                    bot.close_browser()
             if len(error_accounts) > 0:
                 for i, err_acc in enumerate(error_accounts):
                     bot = BotPost()
                     try:
                         bot.load_video(account=err_acc, i=i)
-                        bot.close_browser()
                     except Exception as ex:
                         print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
-                        bot.close_browser()
                         continue
+                    finally:
+                        bot.close_browser()
+        else:
+            print('❌ Категории с таким название не существует')
+
+
+# пост multiprocessing
+@app.command()
+def postmp(category: str):
+    if category == 'all':
+        p = Pool(processes=int(os.getenv('PROCESS')))
+        p.map(load_mp, os.listdir('cookies'))
+        p.close()
+    else:
+        if db.category_exists(category):
+            p = Pool(processes=int(os.getenv('PROCESS')))
+            p.map(load_mp, db.get_accounts_in_category(category))
+            p.close()
         else:
             print('❌ Категории с таким название не существует')
 

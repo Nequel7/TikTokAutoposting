@@ -130,6 +130,7 @@ class BotPost:
         WebDriverWait(browser, 100).until(
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "div[class='tiktok-modal__modal-button is-highlight']")))
+        os.remove(f"{os.getenv('VIDEO_PATH')}{videos_list[i % filters]}")
         print(f"✅ Video uploaded successfully in account ({account.split('_')[0]})")
 
 
