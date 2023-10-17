@@ -14,7 +14,7 @@ def load_mp(cookie):
         bot.load_video(account=cookie, i=os.listdir('cookies').index(f'{cookie}'))
         # selenium.common.exceptions.NoSuchElementException
     except Exception as ex:
-        print('ERROR', ex, f'In account: {cookie.split("_")[0]}')
+        print('ERROR' f'In account: {cookie.split("_")[0]}')
         error_accounts.append(cookie)
     finally:
         bot.close_browser()
@@ -24,7 +24,7 @@ def load_mp(cookie):
             try:
                 bot.load_video(account=err_acc, i=i)
             except Exception as ex:
-                print('CRITICAL ERROR', ex, f'In account: {err_acc.split("_")[0]}')
+                print('CRITICAL ERROR' f'In account: {err_acc.split("_")[0]}')
             finally:
                 bot.close_browser()
 
